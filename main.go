@@ -3,6 +3,9 @@ package main
 import (
 	"io/ioutil"
 	"net/http"
+    "log"
+    "math/rand"
+    "time"
 )
 
 func main() {
@@ -12,7 +15,14 @@ func main() {
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
-	fileBytes, err := ioutil.ReadFile("./images/2.jpg")
+    files, err := ioutil.ReadDir("./images")
+    if err != nil {
+        log.Fatal(err)
+    }
+    rand.Seed(time.Now().Unix())
+    n := rand.Int() % len(files)
+    randomFileAddress := "./images/" + files[n].Name()
+	fileBytes, err := ioutil.ReadFile(randomFileAddress)
 	if err != nil {
 		panic(err)
 	}
